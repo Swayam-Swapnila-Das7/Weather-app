@@ -261,18 +261,19 @@ footer{
 	background: rgba(0, 0, 0, 0.9);
 	color: rgba(220, 220, 220, 0.8);
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	gap: auto;
+	gap: 20px;
 	font-size: 20px;
-	padding: 0px 20px;
+	padding: 0px 20px 20px 20px;
 	position: fixed;
     bottom: 0;
     left: 0;
     z-index: 999;
     transform: translateY(100%);
     transition: transform 0.4s ease-in-out;
+    text-align: left;
 }
 
 footer.slide-up{
@@ -282,14 +283,17 @@ footer.slide-up{
 a,button{
 	cursor: pointer;
 }
-
+@media (min-width: 1200px){
+	footer{
+		flex-direction: row;
+		gap: auto;
+		padding-bottom: 0px;
+		font-size: 20px;
+	}
+}
 @media (max-width: 599px){
 	footer{
-		flex-direction: column;
-		gap: 20px;
-		padding-bottom: 20px;
 		font-size: 15px;
-		text-align: left;
 	}
 	nav div{
 		width: 95dvw;

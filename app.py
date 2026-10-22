@@ -10,7 +10,7 @@ app.secret_key = "1234567890"
 #api urls
 geocoding_api = r"https://geocoding-api.open-meteo.com/v1/search"
 forcast_api = r"https://api.open-meteo.com/v1/forecast"
-ip_api = r"http://ip-api.com/json/"
+ip_api = fr"http://ip-api.com/json/"
 aqi_api = r"https://air-quality-api.open-meteo.com/v1/air-quality"
 #weather codes
 weather_code = {
@@ -56,15 +56,11 @@ backgrounds = {
 }
 
 
-def _getcity():
+def _getcity(ipaddr):
 	try:
-		return requests.get(ip_api).json().get('city','none')
+		return requests.get(ip_api+ipaddr).json().get('city','london')
 	except Exception as e:
-		return 'none'
-	city = _getcity()
-	if city == 'none':
-		city = 'london'
-	return city
+		return 'london'
 
 def _get_geocode(city):
 	geocode_param = {
@@ -131,7 +127,11 @@ def weather_app():
 	if request.method == 'POST':
 		city = request.form.get('city')
 	else :
-		city = _getcity()
+		if request.headers.getlist("X-Forwarded-For"):
+			user_ip = request.headers.getlist("X-Forwarded-For")[0].split(',')[0].strip()
+		else:
+			user_ip = request.remote_addr
+		city = _getcity(user_ip)
 	location = _get_geocode(city)
 
 	if location == 'none':
